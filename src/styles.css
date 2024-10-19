@@ -51,8 +51,11 @@ h6 {
 /* Actual Code */
 
 body {
+    display: flex;
+
     min-height: 100vh;
-    background-image: url(background.jpg);
+    background-image: url(background.jpg) ;
+    background-size: cover;
 
     font-family: "Roboto";
 }
@@ -150,5 +153,133 @@ header li > img {
 
 header > nav > ul:last-of-type {
     padding-left: 20px;
+}
+
+#content {
+    flex: 1;
+
+    margin: 10px;
     
+    border: none;
+    border-radius: 10px;
+
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+
+    backdrop-filter: blur(3px);
+
+}
+
+h1 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+
+    font-size: 40px;
+}
+
+.list-table  {
+    margin-left: 20px;
+    
+    width: calc(100% - 100px);
+    border-collapse: collapse;
+}
+
+.list-table th, .list-table td {
+    padding: 0.2em 0.3em;
+}
+
+.list-table-header td {
+    border: none;
+    border-bottom: solid 1px grey;
+
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.list-table-header td:nth-child(1) {
+    width: 4%;
+}
+
+.list-table-header td:nth-child(3) {
+    width: 15%
+}
+
+.list-table-header td:nth-child(4) {
+    width: 15%
+}
+
+.list-table-header td:nth-child(5) {
+    width: 70px;
+}
+
+.task-checkbox button {
+    display: flex;
+    align-items: center;
+
+    padding: 0;
+
+    border: none;
+    background-color: transparent;
+}
+
+.task-checkbox img {
+    height: 25px;
+    width: 25px;
+}
+
+.list-table-body td {
+    border: none;
+
+    vertical-align: center;
+
+    font-size: 22px;
+    font-weight: 400;
+}
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+}
+
+.action-buttons button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0px;
+    background-color: transparent;
+    border: none;
+
+    height: 25px;
+    width: 25px;
+}
+
+.action-buttons img {
+    height: 100%;
+    width: 100%;
+}
+
+.add-task {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    right: 5%;
+    bottom: 5%;
+
+    border-radius: 100%;
+    border: none;
+
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+
+    background-color: #fcfcfc;
+
+    height: 55px;
+    width: 55px;
+
+    font-size: 40px;
 }
