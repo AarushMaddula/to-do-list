@@ -7,7 +7,7 @@ import taskController from "./taskController";
 let currentTaskID = 0;
 let currentProjectID = 0;
 
-function createTask(projectID, task, description, date, priority) {
+function createTask(projectID, taskName, description, date, priority) {
     const id = currentTaskID++;
 
     let checked = false;
@@ -31,7 +31,39 @@ function createTask(projectID, task, description, date, priority) {
         return checkedTime;
     }
 
-    return {id, projectID, task, description, date, priority, isChecked, getCheckedTime, toggleCheckbox}
+    const setTaskName = function(input) {
+        taskName = input;
+    }
+
+    const getTaskName = function() {
+        return taskName;
+    }
+
+    const setDescription = function(input) {
+        description = input;
+    }
+
+    const getDescription = function() {
+        return description;
+    }
+
+    const setDate = function(input) {
+        date = input;
+    }
+
+    const getDate = function() {
+        return date;
+    }
+
+    const setPriority = function(input) {
+        priority = input;
+    }
+
+    const getPriority = function() {
+        return priority;
+    }
+
+    return {id, projectID, getTaskName, setTaskName, getDescription, setDescription, getDate, setDate, getPriority, setPriority, isChecked, getCheckedTime, toggleCheckbox}
 }
 
 const createProjectObj = function(name) {

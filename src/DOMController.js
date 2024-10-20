@@ -14,6 +14,8 @@ const DOMController = (function() {
         taskList.forEach(task => {
             const tr = document.createElement('tr');
             tr.setAttribute('data-taskid', task.id);
+            
+            if (task.isChecked()) tr.classList.add('task-marked');
     
             const tdCheckbox = document.createElement('td');
             tdCheckbox.classList.add('task-checkbox');
@@ -35,15 +37,15 @@ const DOMController = (function() {
             tr.appendChild(tdCheckbox)
     
             const tdtask = document.createElement('td');
-            tdtask.textContent = task.task;
+            tdtask.textContent = task.getTaskName();
             tr.appendChild(tdtask);
     
             const tdDate = document.createElement('td');
-            tdDate.textContent = task.date;
+            tdDate.textContent = task.getDate();
             tr.appendChild(tdDate);
     
             const tdPriority = document.createElement('td');
-            tdPriority.textContent = task.priority;
+            tdPriority.textContent = task.getPriority();
             tr.appendChild(tdPriority);
             
             const tdAction = document.createElement('td');

@@ -40,10 +40,13 @@ const taskController = (function() {
 
             if (aChecked || bChecked) return aChecked ? 1 : -1;
 
-            if (b.date !== a.date) return b.date < a.date ? 1 : -1;
+            const aDate = a.getDate();
+            const bDate = b.getDate();
+            
+            if (bDate !== aDate) return bDate < aDate ? 1 : -1;
             
             let bValue = 0;
-            switch (b.priority) {
+            switch (b.getPriority()) {
                 case "high":
                     bValue = 3;
                     break;
@@ -56,7 +59,7 @@ const taskController = (function() {
             }
 
             let aValue = 0;
-            switch (a.priority) {
+            switch (a.getPriority()) {
                 case "high":
                     aValue = 3;
                     break;
@@ -70,7 +73,7 @@ const taskController = (function() {
             
             if (aValue !== bValue) return aValue > bValue ? -1 : 1;
 
-            return a.task > b.task ? 1 : -1;
+            return a.getTaskName() > b.getTaskName() ? 1 : -1;
         }
 
         return list.sort(sortTask);

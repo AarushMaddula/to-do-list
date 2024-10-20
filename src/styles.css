@@ -197,7 +197,7 @@ h1 {
 }
 
 .list-table-header td:nth-child(1) {
-    width: 4%;
+    width: 40px;
 }
 
 .list-table-header td:nth-child(3) {
@@ -235,6 +235,11 @@ h1 {
     font-size: 22px;
     font-weight: 400;
 }
+
+.task-marked > td {
+    text-decoration: line-through;
+    color: gray;
+} 
 
 .action-buttons {
     display: flex;
