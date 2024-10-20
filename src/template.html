@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To Do List</title>
 </head>
+
 <body>
     <header>
         <div class="header-brand">
@@ -13,7 +15,7 @@
                 Checkmark
             </div>
         </div>
-        <nav> 
+        <nav>
             <ul class="default-projects">
                 <li><img src="view-day.svg" alt="icon"> Today</li>
                 <li><img src="view-week.svg" alt="icon"> Week</li>
@@ -34,7 +36,7 @@
     </header>
 
     <div id="content">
-        <!-- <h1 class="list-header">Project: School</h1>
+        <h1 class="list-header">Project: School</h1>
 
         <table class="list-table">
             <thead class="list-table-header">
@@ -46,23 +48,48 @@
                     <td></td>
                 </tr>
             </thead>
-        
-            <tbody class="list-table-body">
-                <tr>
-                    <td class="task-checkbox"><button><img src="radiobox-blank.svg" alt="checkbox"></button></td>
-                    <td>Finish Math Homework</td>
-                    <td>12/12/24</td>
-                    <td>High</td>
-                    <td class="action-buttons">
-                        <button><img src="pencil.svg" alt="edit"></button>
-                        <button><img src="trash-can.svg" alt="delete"></button>
-                    </td>
-                </tr>
 
+            <tbody class="list-table-body">
             </tbody>
         </table>
-        
-        <button class="add-task">+</button> -->
+
+        <button class="add-task">+</button>
+
+        <dialog id="add-task-dialog">
+
+            <form method="dialog">
+                <h2>Add Task</h2>
+                <ul>
+                    <li>
+                        <label for="task">Task</label>
+                        <input type="text" id="task" name="task" required>
+                    </li>
+                    <li>
+                        <label for="description">Description</label>
+                        <textarea type="text" id="description" name="description" required></textarea>
+                    </li>
+                    <li>
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </li>
+
+                    <li>
+                        <label for="priority">Priority</label>
+                        <select id="priority" name="priority" required>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </li>
+                </ul>
+
+                <div class="add-task-action-buttons">
+                    <button type="button" id="add-task-cancel">Cancel</button>
+                    <button type="submit" id="add-task-submit">Add</button>
+                </div>
+            </form>
+        </dialog>
     </div>
 </body>
+
 </html>

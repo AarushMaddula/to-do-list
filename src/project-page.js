@@ -19,7 +19,7 @@ const generateProjectPage = function() {
 
     const tr = document.createElement('tr');
 
-    const theadLabels = ["", "Name", "Date", "Priority", ""]
+    const theadLabels = ["", "Task", "Date", "Priority", ""]
 
     theadLabels.forEach((value) => {
         const td = document.createElement('td');
@@ -33,7 +33,7 @@ const generateProjectPage = function() {
     const tbody = document.createElement('tbody');
     tbody.classList.add('list-table-body');
 
-    const tasks = [{name: "Finish Math Homework", date: "12/12/2024", priority: "High"}]
+    const tasks = [{task: "Finish Math Homework", date: "12/12/2024", priority: "High"}]
 
     tasks.forEach((task) => {
         const tr = document.createElement('tr');
@@ -50,9 +50,9 @@ const generateProjectPage = function() {
         tdCheckbox.appendChild(buttonCheckbox);
         tr.appendChild(tdCheckbox)
 
-        const tdName = document.createElement('td');
-        tdName.textContent = task.name;
-        tr.appendChild(tdName);
+        const tdtask = document.createElement('td');
+        tdtask.textContent = task.task;
+        tr.appendChild(tdtask);
 
         const tdDate = document.createElement('td');
         tdDate.textContent = task.date;
@@ -90,7 +90,16 @@ const generateProjectPage = function() {
     const addTaskButton = document.createElement('button');
     addTaskButton.classList.add('add-task');
     addTaskButton.textContent = "+";
+
+    addTaskButton.addEventListener('click', (e) => {
+        const dialog = document.querySelector('#add-task-dialog');
+        dialog.showModal();
+    })
+
     content.appendChild(addTaskButton);
+
+    const addTaskDialog = document.createElement();
+
 }
 
 export {generateProjectPage};

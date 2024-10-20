@@ -283,3 +283,91 @@ h1 {
 
     font-size: 40px;
 }
+
+#add-task-dialog {
+    margin: auto;
+    width: 20%;
+
+    border-radius: 10px;
+    border: none;
+
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.9);
+
+    background-color: transparent;
+    backdrop-filter: blur(10px);
+}
+
+#add-task-dialog form {
+    display: flex;
+    flex-direction: column;
+}
+
+#add-task-dialog ul {
+    list-style: none;
+    width: 100%;
+
+    padding: 0px;
+    margin: 10px 0px;
+}
+
+#add-task-dialog li {
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 0.75em;
+}
+
+#add-task-dialog label {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+#add-task-dialog input, 
+#add-task-dialog textarea, 
+#add-task-dialog select {
+    border: none;
+    border-bottom: solid 2px rgb(171, 171, 171);
+
+    background-color: transparent;
+    transition: border-bottom-color 100ms;
+}
+
+#add-task-dialog input:focus, 
+#add-task-dialog textarea:focus, 
+#add-task-dialog select:focus {
+    outline: none;
+    border-bottom-color: rgb(54, 54, 54);
+
+    background-color: transparent;
+}
+
+#add-task-dialog textarea {
+    resize: none;
+}
+
+.add-task-action-buttons {
+    width: 100%;
+
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 10px;
+}
+
+.add-task-action-buttons button {
+    padding: 5px 15px;
+
+    border-radius: 5px;
+    border: none;
+    
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+
+    font-weight: 500;
+    font-size: 16px;
+
+    transition: background-color 50ms;
+}
+
+.add-task-action-buttons button:hover {
+   background-color: rgb(200, 200, 200);
+}
