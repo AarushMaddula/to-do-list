@@ -76,7 +76,16 @@ const taskController = (function() {
         return list.sort(sortTask);
     }
 
-    return {addTask, getTaskByID, getTasksByProject};
+    const deleteTask = function(id) {
+        taskList.forEach((task, i) => {
+            if (task.id === id) {
+                taskList.splice(i, 1);
+                return;
+            }
+        });
+    }
+
+    return {addTask, getTaskByID, getTasksByProject, deleteTask};
 }) ()
 
 export default taskController;

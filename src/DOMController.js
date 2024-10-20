@@ -57,6 +57,13 @@ const DOMController = (function() {
             tdAction.appendChild(editButton);
     
             const deleteButton = document.createElement('button');
+            deleteButton.addEventListener('click', e => {
+                const taskID = +deleteButton.parentElement.parentElement.dataset.taskid;
+                taskController.deleteTask(taskID);
+
+                loadTasks(taskController.getTasksByProject(1));
+            }) 
+        
             const deleteImage = document.createElement('img');
             deleteImage.src = trashcan;
             deleteImage.alt = "delete";
