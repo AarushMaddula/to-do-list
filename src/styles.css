@@ -289,9 +289,9 @@ h1 {
     font-size: 40px;
 }
 
-#add-task-dialog {
+#task-dialog {
     margin: auto;
-    width: 20%;
+    width: clamp(250px, 20%, 500px);
 
     border-radius: 10px;
     border: none;
@@ -302,12 +302,12 @@ h1 {
     backdrop-filter: blur(10px);
 }
 
-#add-task-dialog form {
+#task-dialog form {
     display: flex;
     flex-direction: column;
 }
 
-#add-task-dialog ul {
+#task-dialog ul {
     list-style: none;
     width: 100%;
 
@@ -315,21 +315,21 @@ h1 {
     margin: 10px 0px;
 }
 
-#add-task-dialog li {
+#task-dialog li {
     display: flex;
     flex-direction: column;
 
     margin-bottom: 0.75em;
 }
 
-#add-task-dialog label {
+#task-dialog label {
     font-weight: 500;
     font-size: 18px;
 }
 
-#add-task-dialog input, 
-#add-task-dialog textarea, 
-#add-task-dialog select {
+#task-dialog input, 
+#task-dialog textarea, 
+#task-dialog select {
     border: none;
     border-bottom: solid 2px rgb(171, 171, 171);
 
@@ -337,20 +337,20 @@ h1 {
     transition: border-bottom-color 100ms;
 }
 
-#add-task-dialog input:focus, 
-#add-task-dialog textarea:focus, 
-#add-task-dialog select:focus {
+#task-dialog input:focus, 
+#task-dialog textarea:focus, 
+#task-dialog select:focus {
     outline: none;
     border-bottom-color: rgb(54, 54, 54);
 
     background-color: transparent;
 }
 
-#add-task-dialog textarea {
+#task-dialog textarea {
     resize: none;
 }
 
-.add-task-action-buttons {
+.task-dialog-buttons {
     width: 100%;
 
     display: flex;
@@ -359,7 +359,7 @@ h1 {
     gap: 10px;
 }
 
-.add-task-action-buttons button {
+.task-dialog-buttons button {
     padding: 5px 15px;
 
     border-radius: 5px;
@@ -373,6 +373,6 @@ h1 {
     transition: background-color 50ms;
 }
 
-.add-task-action-buttons button:hover {
+.task-dialog-buttons  button:hover {
    background-color: rgb(200, 200, 200);
 }
