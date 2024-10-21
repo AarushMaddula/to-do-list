@@ -185,6 +185,7 @@ h1 {
 }
 
 .list-table th, .list-table td {
+    vertical-align: top;
     padding: 0.2em 0.3em;
 }
 
@@ -197,40 +198,45 @@ h1 {
 }
 
 .list-table-header td:nth-child(1) {
-    width: 40px;
+    width: 60px;
 }
 
 .list-table-header td:nth-child(3) {
-    width: 15%
+    width: 150px;
 }
 
 .list-table-header td:nth-child(4) {
-    width: 15%
+    width: 100px;
 }
 
 .list-table-header td:nth-child(5) {
-    width: 70px;
+    width: 75px;
+}
+
+.task-checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
 }
 
 .task-checkbox button {
-    display: flex;
-    align-items: center;
-
     padding: 0;
+    margin: 0;
+
+    height: 27px;
+    width: 27px;
 
     border: none;
     background-color: transparent;
 }
 
 .task-checkbox img {
-    height: 25px;
-    width: 25px;
+    height: 100%;
+    width: 100%;
 }
 
 .list-table-body td {
     border: none;
-
-    vertical-align: center;
 
     font-size: 22px;
     font-weight: 400;
@@ -241,30 +247,35 @@ h1 {
     color: gray;
 } 
 
+.description-visible {
+    display: block !important; 
+    padding-left: 15px;
+    font-size: 16px;
+    font-style: italic;
+
+    border-left: solid 2px rgb(171, 171, 171);
+}
+
 .action-buttons {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
-
-    width: 100%;
 }
 
 .action-buttons button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
     padding: 0px;
+    margin: 0px;
+
+    height: 27px;
+    width: 27px;
+
     background-color: transparent;
     border: none;
-
-    height: 25px;
-    width: 25px;
 }
 
 .action-buttons img {
-    height: 100%;
-    width: 100%;
+   height: 100%;
+   width: 100%;
 }
 
 .add-task {

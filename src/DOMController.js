@@ -121,8 +121,6 @@ const DOMController = (function () {
             const tdCheckbox = document.createElement('td');
             tdCheckbox.classList.add('task-checkbox');
             tdCheckbox.addEventListener('click', e => {
-                const taskID = +tdCheckbox.parentElement.dataset.taskid;
-                const task = taskController.getTaskByID(taskID);
                 task.toggleCheckbox();
 
                 loadTasks(taskController.getTasksByProject(task.projectID));
@@ -137,9 +135,21 @@ const DOMController = (function () {
             tdCheckbox.appendChild(buttonCheckbox);
             tr.appendChild(tdCheckbox)
 
-            const tdtask = document.createElement('td');
-            tdtask.textContent = task.getTaskName();
-            tr.appendChild(tdtask);
+            const tdTask = document.createElement('td');
+            tdTask.textContent = task.getTaskName();
+
+            const tdTaskDescription = document.createElement('p');
+            tdTaskDescription.textContent = task.getDescription();
+            tdTaskDescription.style.display = "none";
+
+            tdTask.appendChild(tdTaskDescription);
+
+            tdTask.addEventListener('click', () => {
+                const e = tdTask.children[0];
+                e.classList.toggle("description-visible");
+            })
+
+            tr.appendChild(tdTask);
 
             const tdDate = document.createElement('td');
             tdDate.textContent = task.getDate();
