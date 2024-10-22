@@ -16,28 +16,37 @@ const DOMController = (function () {
     let taskDialogCancelButton = document.getElementById('task-dialog-cancel');
     let taskDialogSubmitButton = document.getElementById('task-dialog-submit');
 
-    const dialogHeader = document.querySelector('#task-dialog > form > h2');    
-    
+    const dialogHeader = document.querySelector('#task-dialog > form > h2');
+
+    const listTableBody = document.querySelector('.list-table-body');
+
     function addTaskDialogSubmit(e) {
         e.preventDefault();
-                
+
         const task = document.querySelector('#task-dialog input[type="text"]').value;
         const description = document.querySelector('#task-dialog textarea').value;
         const date = document.querySelector('#task-dialog input[type="date"]').value;
         const priority = document.querySelector('#task-dialog select').value;
-        
+
         const newTask = createTask(1, task, description, date, priority);
         taskController.addTask(newTask);
-        
-        loadTasks(taskController.getTasksByProject(1));
-        
+
+        const newTaskElement = createTaskElement(newTask);
+        const position = taskController.getTaskPosition(1, newTask.id);
+
+        if (position === 1) {
+            listTableBody.insertBefore(newTaskElement, listTableBody.children[0]);
+        } else {
+            listTableBody.children[position - 2].after(newTaskElement);
+        }
+
         dialogForm.reset();
         dialog.close();
     }
 
     function editTaskDialogSubmit(task, e) {
         e.preventDefault();
-        
+
         const taskName = document.querySelector('#task-dialog input[type="text"]').value;
         const description = document.querySelector('#task-dialog textarea').value;
         const date = document.querySelector('#task-dialog input[type="date"]').value;
@@ -47,9 +56,9 @@ const DOMController = (function () {
         task.setDescription(description);
         task.setDate(date);
         task.setPriority(priority);
-        
-        loadTasks(taskController.getTasksByProject(1));
-        
+
+        updateTaskPosition(task.id)
+
         dialogForm.reset();
         dialog.close();
     }
@@ -61,20 +70,20 @@ const DOMController = (function () {
 
     function resetButtons() {
         const newSubmit = taskDialogSubmitButton.cloneNode(true);
-        taskDialogSubmitButton.parentNode.replaceChild(newSubmit, taskDialogSubmitButton); 
+        taskDialogSubmitButton.parentNode.replaceChild(newSubmit, taskDialogSubmitButton);
         taskDialogSubmitButton = newSubmit;
 
         const newCancel = taskDialogCancelButton.cloneNode(true);
-        taskDialogCancelButton.parentNode.replaceChild(newCancel, taskDialogCancelButton); 
+        taskDialogCancelButton.parentNode.replaceChild(newCancel, taskDialogCancelButton);
         taskDialogCancelButton = newCancel;
     }
-    
-    const initAddTaskDialog = function() {
+
+    const initAddTaskDialog = function () {
         dialogHeader.textContent = "Create Task";
 
         taskDialogSubmitButton.textContent = "Add";
-       
-        resetButtons() 
+
+        resetButtons()
 
         taskDialogSubmitButton.addEventListener('click', addTaskDialogSubmit);
         taskDialogCancelButton.addEventListener('click', taskDialogCancel);
@@ -82,7 +91,7 @@ const DOMController = (function () {
         dialog.showModal();
     }
 
-    const initEditTaskDialog = function(task) {
+    const initEditTaskDialog = function (task) {
         dialogHeader.textContent = "Edit Task";
         taskDialogSubmitButton.textContent = "Save";
 
@@ -98,7 +107,7 @@ const DOMController = (function () {
         const priority = document.querySelector('#task-dialog select');
         priority.value = task.getPriority();
 
-        resetButtons() 
+        resetButtons()
 
         taskDialogSubmitButton.addEventListener('click', editTaskDialogSubmit.bind(null, task));
         taskDialogCancelButton.addEventListener('click', taskDialogCancel);
@@ -106,92 +115,119 @@ const DOMController = (function () {
         dialog.showModal();
     }
 
-    addTaskButton.addEventListener('click', initAddTaskDialog)
+    addTaskButton.addEventListener('click', initAddTaskDialog);
 
     const loadTasks = function (taskList) {
-        const tbody = document.querySelector('.list-table-body');
-        tbody.innerHTML = "";
+        listTableBody.innerHTML = "";
 
         taskList.forEach(task => {
-            const tr = document.createElement('tr');
-            tr.setAttribute('data-taskid', task.id);
-
-            if (task.isChecked()) tr.classList.add('task-marked');
-
-            const tdCheckbox = document.createElement('td');
-            tdCheckbox.classList.add('task-checkbox');
-            tdCheckbox.addEventListener('click', e => {
-                task.toggleCheckbox();
-
-                loadTasks(taskController.getTasksByProject(task.projectID));
-            })
-
-            const buttonCheckbox = document.createElement('button');
-            const ImgCheckbox = document.createElement('img');
-            ImgCheckbox.src = task.isChecked() ? checkboxMarked : checkboxBlank;
-            ImgCheckbox.alt = "icon";
-
-            buttonCheckbox.appendChild(ImgCheckbox);
-            tdCheckbox.appendChild(buttonCheckbox);
-            tr.appendChild(tdCheckbox)
-
-            const tdTask = document.createElement('td');
-            tdTask.textContent = task.getTaskName();
-
-            const tdTaskDescription = document.createElement('p');
-            tdTaskDescription.textContent = task.getDescription();
-            tdTaskDescription.style.display = "none";
-
-            tdTask.appendChild(tdTaskDescription);
-
-            tdTask.addEventListener('click', () => {
-                const e = tdTask.children[0];
-                e.classList.toggle("description-visible");
-            })
-
-            tr.appendChild(tdTask);
-
-            const tdDate = document.createElement('td');
-            tdDate.textContent = task.getDate();
-            tr.appendChild(tdDate);
-
-            const tdPriority = document.createElement('td');
-            tdPriority.textContent = task.getPriority();
-            tr.appendChild(tdPriority);
-
-            const tdAction = document.createElement('td');
-            tdAction.classList.add('action-buttons');
-
-            const editButton = document.createElement('button');
-            editButton.addEventListener('click', initEditTaskDialog.bind(null, task))
-
-            const editImage = document.createElement('img');
-            editImage.src = pencil;
-            editImage.alt = "edit";
-            editButton.appendChild(editImage);
-            tdAction.appendChild(editButton);
-
-            const deleteButton = document.createElement('button');
-            deleteButton.addEventListener('click', e => {
-                const taskID = +deleteButton.parentElement.parentElement.dataset.taskid;
-                taskController.deleteTask(taskID);
-
-                loadTasks(taskController.getTasksByProject(1));
-            })
-
-            const deleteImage = document.createElement('img');
-            deleteImage.src = trashcan;
-            deleteImage.alt = "delete";
-            deleteButton.appendChild(deleteImage);
-            tdAction.appendChild(deleteButton);
-
-            tr.appendChild(tdAction);
-
-            tbody.appendChild(tr);
+            listTableBody.appendChild(createTaskElement(task));
         });
     }
 
-    return { initAddTaskDialog, initEditTaskDialog, loadTasks }
+    const updateTaskPosition = function (taskID) {
+        const currentElement = document.querySelector(`.list-table-body > tr[data-taskid="${taskID}"]`);
+
+        const position = taskController.getTaskPosition(1, taskID);
+        const previousPosition = Array.prototype.indexOf.call(listTableBody.children, currentElement) + 1;
+
+        if (previousPosition > position) {
+            listTableBody.insertBefore(currentElement, listTableBody.children[position - 1]);
+        } else if (previousPosition < position) {
+            listTableBody.children[position - 1].after(currentElement);
+        }
+    }
+
+    const deleteTaskElement = function (taskID) {
+        const element = document.querySelector(`.list-table-body > tr[data-taskid="${taskID}"]`);
+        listTableBody.removeChild(element);
+    }
+
+    const createTaskElement = function (task) {
+
+        //checkbox
+        const tdCheckbox = document.createElement('td');
+        tdCheckbox.classList.add('task-checkbox');
+        tdCheckbox.addEventListener('click', e => {
+            task.toggleCheckbox();
+
+            tr.classList.toggle('task-marked');
+            ImgCheckbox.src = task.isChecked() ? checkboxMarked : checkboxBlank;
+            updateTaskPosition(task.id);
+        })
+
+        const buttonCheckbox = document.createElement('button');
+
+        const ImgCheckbox = document.createElement('img');
+        ImgCheckbox.src = task.isChecked() ? checkboxMarked : checkboxBlank;
+        ImgCheckbox.alt = "icon";
+
+        //task name
+        const tdTask = document.createElement('td');
+        tdTask.textContent = task.getTaskName();
+        tdTask.addEventListener('click', () => {
+            const e = tdTask.children[0];
+            e.classList.toggle("description-visible");
+        })
+
+        const tdTaskDescription = document.createElement('p');
+        tdTaskDescription.textContent = task.getDescription();
+        tdTaskDescription.style.display = "none";
+
+        //task date
+        const tdDate = document.createElement('td');
+        tdDate.textContent = task.getDate();
+
+        //task priority
+        const tdPriority = document.createElement('td');
+        tdPriority.textContent = task.getPriority();
+
+        //edit button
+        const editButton = document.createElement('button');
+        editButton.addEventListener('click', initEditTaskDialog.bind(null, task))
+
+        const editImage = document.createElement('img');
+        editImage.src = pencil;
+        editImage.alt = "edit";
+
+        //delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.addEventListener('click', e => {
+            taskController.deleteTask(+task.id);
+            deleteTaskElement(+task.id);
+        })
+
+        const deleteImage = document.createElement('img');
+        deleteImage.src = trashcan;
+        deleteImage.alt = "delete";
+
+        //containers
+        const tdAction = document.createElement('td');
+        tdAction.classList.add('action-buttons');
+        
+        buttonCheckbox.appendChild(ImgCheckbox);
+        tdCheckbox.appendChild(buttonCheckbox);
+        tdTask.appendChild(tdTaskDescription);
+        editButton.appendChild(editImage);
+        tdAction.appendChild(editButton);
+        deleteButton.appendChild(deleteImage);
+        tdAction.appendChild(deleteButton);
+        
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-taskid', task.id);
+
+        if (task.isChecked()) tr.classList.add('task-marked');
+        
+        tr.appendChild(tdCheckbox)
+        tr.appendChild(tdTask);
+        tr.appendChild(tdDate);
+        tr.appendChild(tdPriority);
+        tr.appendChild(tdAction);
+
+        return tr;
+    }
+
+    return { initAddTaskDialog, initEditTaskDialog, loadTasks, createTaskElement, deleteTaskElement, updateTaskPosition }
 })()
 
 export default DOMController;

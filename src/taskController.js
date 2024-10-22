@@ -43,7 +43,10 @@ const taskController = (function() {
             const aDate = a.getDate();
             const bDate = b.getDate();
             
-            if (bDate !== aDate) return bDate < aDate ? 1 : -1;
+            if (bDate !== aDate) {
+                if (bDate && aDate) return bDate < aDate ? 1 : -1;
+                return bDate < aDate ? -1 : 1;
+            }
             
             let bValue = 0;
             switch (b.getPriority()) {
@@ -88,7 +91,19 @@ const taskController = (function() {
         });
     }
 
-    return {addTask, getTaskByID, getTasksByProject, deleteTask};
+    const getTaskPosition = function(projectID, taskID) {
+        const tasks = getTasksByProject(projectID);
+
+        let index = 0;
+
+        tasks.forEach((task, i) => {
+            if (task.id === taskID) index = i;
+        }) 
+
+        return index + 1;
+    }
+
+    return {addTask, getTaskByID, getTasksByProject, deleteTask, getTaskPosition};
 }) ()
 
 export default taskController;
