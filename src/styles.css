@@ -186,7 +186,7 @@ h1 {
 
 .list-table th, .list-table td {
     vertical-align: top;
-    padding: 0.2em 0.3em;
+    padding: 0.3em 0.3em;
 }
 
 .list-table-header td {
@@ -231,7 +231,7 @@ h1 {
 }
 
 .task-checkbox img {
-    height: 100%;
+    height: 110%;
     width: 100%;
 }
 
@@ -300,7 +300,8 @@ h1 {
     font-size: 40px;
 }
 
-#task-dialog {
+#task-dialog, 
+#project-dialog {
     margin: auto;
     width: clamp(250px, 20%, 500px);
 
@@ -313,12 +314,14 @@ h1 {
     backdrop-filter: blur(10px);
 }
 
-#task-dialog form {
+#task-dialog form, 
+#project-dialog form {
     display: flex;
     flex-direction: column;
 }
 
-#task-dialog ul {
+#task-dialog ul,
+#project-dialog ul {
     list-style: none;
     width: 100%;
 
@@ -326,21 +329,24 @@ h1 {
     margin: 10px 0px;
 }
 
-#task-dialog li {
+#task-dialog li, 
+#project-dialog li{
     display: flex;
     flex-direction: column;
 
     margin-bottom: 0.75em;
 }
 
-#task-dialog label {
+#task-dialog label, 
+#project-dialog label {
     font-weight: 500;
     font-size: 18px;
 }
 
 #task-dialog input, 
 #task-dialog textarea, 
-#task-dialog select {
+#task-dialog select,
+#project-dialog input {
     border: none;
     border-bottom: solid 2px rgb(171, 171, 171);
 
@@ -350,7 +356,8 @@ h1 {
 
 #task-dialog input:focus, 
 #task-dialog textarea:focus, 
-#task-dialog select:focus {
+#task-dialog select:focus,
+#project-dialog input:focus {
     outline: none;
     border-bottom-color: rgb(54, 54, 54);
 
@@ -361,7 +368,8 @@ h1 {
     resize: none;
 }
 
-.task-dialog-buttons {
+.task-dialog-buttons,
+.project-dialog-buttons {
     width: 100%;
 
     display: flex;
@@ -370,7 +378,8 @@ h1 {
     gap: 10px;
 }
 
-.task-dialog-buttons button {
+.task-dialog-buttons button,
+.project-dialog-buttons button {
     padding: 5px 15px;
 
     border-radius: 5px;
@@ -384,6 +393,7 @@ h1 {
     transition: background-color 50ms;
 }
 
-.task-dialog-buttons  button:hover {
+.task-dialog-buttons button:hover,
+.project-dialog-buttons button:hover {
    background-color: rgb(200, 200, 200);
 }

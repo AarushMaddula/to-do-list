@@ -17,9 +17,9 @@
         </div>
         <nav>
             <ul class="default-projects">
-                <li><img src="view-day.svg" alt="icon"> Today</li>
-                <li><img src="view-week.svg" alt="icon"> Week</li>
-                <li><img src="calendar-blank.svg" alt="icon"> Year</li>
+                <li><img src="view-day.svg" alt="icon">Today</li>
+                <li><img src="view-week.svg" alt="icon">Week</li>
+                <li><img src="calendar-blank.svg" alt="icon">All Time</li>
             </ul>
 
             <div class="project-header">
@@ -28,9 +28,6 @@
             </div>
 
             <ul class="project-container">
-                <li><img src="format-list-checkbox.svg" alt="icon"> School</li>
-                <li><img src="format-list-checkbox.svg" alt="icon"> Work</li>
-                <li><img src="format-list-checkbox.svg" alt="icon"> Personal</li>
             </ul>
         </nav>
     </header>
@@ -85,6 +82,23 @@
                 <div class="task-dialog-buttons">
                     <button type="button" id="task-dialog-cancel">Cancel</button>
                     <button type="submit" id="task-dialog-submit"></button>
+                </div>
+            </form>
+        </dialog>
+
+        <dialog id="project-dialog">
+            <form method="dialog">
+                <h2></h2>
+                <ul>
+                    <li>
+                        <label for="name">Project Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </li>
+                </ul>
+
+                <div class="project-dialog-buttons">
+                    <button type="button" id="project-dialog-cancel">Cancel</button>
+                    <button type="submit" id="project-dialog-submit"></button>
                 </div>
             </form>
         </dialog>

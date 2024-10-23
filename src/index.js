@@ -4,6 +4,7 @@ import DOMController from "./DOMController";
 import projectController from "./projectController";
 import taskController from "./taskController";
 import createTask from "./task.js";
+import createProject from "./project.js";
 
 
 const tasks = [
@@ -15,12 +16,25 @@ const tasks = [
     {task: "Finish Engineering project", description: "Complete Task 2", date: "2024-10-19", priority: "high"}
 ]
 
-tasks.forEach(task => {
-    const newTask = createTask(1, task.task, task.description, task.date, task.priority);
+const projects = [
+    {name: "School"},
+    {name: "Work"},
+    {name: "Personal"},
+]
 
+
+tasks.forEach(task => {
+    const newTask = createTask(0, task.task, task.description, task.date, task.priority);
     taskController.addTask(newTask);
-    DOMController.loadTasks(taskController.getTasksByProject(1));
 });
+
+projects.forEach(project => {
+    const newProject = createProject(project.name);
+    projectController.addProject(newProject);
+})
+
+DOMController.loadProjectContainer(projectController.getProjects())
+DOMController.loadProject(0)
 
 
 

@@ -6,11 +6,6 @@ function createTask(projectID, taskName, description, date, priority) {
     let checked = false;
     let checkedTime = "none";
 
-    let descriptionVar = projectID;
-    let taskNameVar = taskName;
-    let dateVar = date;
-    let priorityVar = priority;
-
     const toggleCheckbox = function () {
         if (checked) {
             checkedTime = "none";
