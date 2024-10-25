@@ -9,6 +9,8 @@ import taskController from "./taskController";
 import projectController from "./projectController";
 import dialogController from "./dialogController";
 
+import { format, isSameISOWeek, isToday } from "date-fns"; 
+
 const DOMController = (function () {
 
     const listTableBody = document.querySelector('.list-table-body');
@@ -18,11 +20,42 @@ const DOMController = (function () {
 
     const addTaskButton = document.querySelector('.add-task');
     const addProjectButton = document.querySelector('.project-header > button');
+
+    const dayProject = document.querySelector('.default-projects li:nth-child(1)');
+    const weekProject = document.querySelector('.default-projects li:nth-child(2)');
+    const allTasksProject = document.querySelector('.default-projects li:nth-child(3)');
     
     let displayedProjectID;
 
     addTaskButton.addEventListener('click', dialogController.initAddTaskDialog);
     addProjectButton.addEventListener('click', dialogController.initAddProjectDialog);
+
+    dayProject.addEventListener('click', () => {
+        pageHeader.textContent = "Today Tasks";
+
+        displayedProjectID = -1;
+
+        const tasks = taskController.getTodayTasks();
+        loadTasks(tasks);
+    })
+
+    weekProject.addEventListener('click', () => {
+        pageHeader.textContent = "Week Tasks";
+
+        displayedProjectID = -2;
+
+        const tasks = taskController.getWeekTasks();
+        loadTasks(tasks);
+    })
+
+    allTasksProject.addEventListener('click', () => {
+        pageHeader.textContent = "All Tasks";
+
+        displayedProjectID = -3;
+
+        const tasks = taskController.getAllTasks();
+        loadTasks(tasks);
+    })
 
     const getDisplayedProjectID = function () {
         return displayedProjectID;
@@ -39,7 +72,23 @@ const DOMController = (function () {
     const updateTaskPosition = function (taskID) {
         const currentElement = document.querySelector(`.list-table-body > tr[data-taskid="${taskID}"]`);
 
+        if (displayedProjectID >= 0 && taskController.getTaskByID(taskID).getProjectID() !== displayedProjectID) {
+            listTableBody.removeChild(currentElement);
+            return;
+        }
+
+        if (displayedProjectID === -1 && !isToday(taskController.getTaskByID(taskID).getDate())) {
+            listTableBody.removeChild(currentElement);
+            return;
+        }
+
+        if (displayedProjectID === -2 && !isSameISOWeek(taskController.getTaskByID(taskID).getDate(), Date.now())) {
+            listTableBody.removeChild(currentElement);
+            return;
+        }
+
         const position = taskController.getTaskPosition(displayedProjectID, taskID);
+
         const previousPosition = Array.prototype.indexOf.call(listTableBody.children, currentElement) + 1;
 
         if (previousPosition > position) {
@@ -60,40 +109,43 @@ const DOMController = (function () {
         //checkbox
         const tdCheckbox = document.createElement('td');
         tdCheckbox.classList.add('task-checkbox');
-        tdCheckbox.addEventListener('click', e => {
+        
+        const buttonCheckbox = document.createElement('button');
+        buttonCheckbox.addEventListener('click', e => {
             task.toggleCheckbox();
 
             tr.classList.toggle('task-marked');
             ImgCheckbox.src = task.isChecked() ? checkboxMarked : checkboxBlank;
             updateTaskPosition(task.id);
         })
-
-        const buttonCheckbox = document.createElement('button');
-
+        
         const ImgCheckbox = document.createElement('img');
         ImgCheckbox.src = task.isChecked() ? checkboxMarked : checkboxBlank;
         ImgCheckbox.alt = "icon";
 
         //task name
         const tdTask = document.createElement('td');
-        tdTask.addEventListener('click', () => {
+        
+        const tdTaskButton = document.createElement('button');
+        tdTaskButton.addEventListener('click', () => {
             tdTaskDescription.classList.toggle("description-visible");
         })
-
+        
         const tdTaskName = document.createElement('p');
         tdTaskName.textContent = task.getTaskName();
-
+        
         const tdTaskDescription = document.createElement('p');
         tdTaskDescription.textContent = task.getDescription();
         tdTaskDescription.style.display = "none";
         
         //task date
         const tdDate = document.createElement('td');
-        tdDate.textContent = task.getDate();
+        tdDate.textContent = format(task.getDate(), 'MM/dd/yyyy');
 
         //task priority
         const tdPriority = document.createElement('td');
-        tdPriority.textContent = task.getPriority();
+        const priorityText = task.getPriority();
+        tdPriority.textContent = priorityText.charAt(0).toUpperCase() + priorityText.substring(1).toLowerCase();
 
         //edit button
         const editButton = document.createElement('button');
@@ -120,8 +172,9 @@ const DOMController = (function () {
         
         buttonCheckbox.appendChild(ImgCheckbox);
         tdCheckbox.appendChild(buttonCheckbox);
-        tdTask.appendChild(tdTaskName);
-        tdTask.appendChild(tdTaskDescription);
+        tdTaskButton.appendChild(tdTaskName);
+        tdTaskButton.appendChild(tdTaskDescription);
+        tdTask.appendChild(tdTaskButton);
         editButton.appendChild(editImage);
         tdAction.appendChild(editButton);
         deleteButton.appendChild(deleteImage);
@@ -144,20 +197,23 @@ const DOMController = (function () {
     const updateTaskInfo = function(taskID) {
         const task = taskController.getTaskByID(taskID);
         const currentElement = document.querySelector(`.list-table-body > tr[data-taskid="${taskID}"]`);
-        
-        currentElement.children[1].children[0].textContent = task.getTaskName();
-        currentElement.children[1].children[1].textContent = task.getDescription();
-        currentElement.children[2].textContent = task.getDate();
-        currentElement.children[3].textContent = task.getPriority();
+        const priorityText = task.getPriority();
+
+        currentElement.children[1].children[0].children[0].textContent = task.getTaskName();
+        currentElement.children[1].children[0].children[1].textContent = task.getDescription();
+        currentElement.children[2].textContent = format(task.getDate(), 'MM/dd/yyyy');
+        currentElement.children[3].textContent = priorityText.charAt(0).toUpperCase() + priorityText.substring(1).toLowerCase();;
     }
 
     const addTaskElement = function (taskID) {
         const newTaskElement = DOMController.createTaskElement(taskID);
         const position = taskController.getTaskPosition(displayedProjectID, taskID);
 
+        if (taskController.getTaskByID(taskID).getProjectID() !== displayedProjectID) return;
+
         if (position === 1) {
             listTableBody.insertBefore(newTaskElement, listTableBody.children[0]);
-        } else {
+        } else  {
             listTableBody.children[position - 2].after(newTaskElement);
         }
     }
@@ -187,14 +243,17 @@ const DOMController = (function () {
         img.src = list;
         img.alt = "icon";
 
+        const button = document.createElement('button');
         const text = document.createTextNode(project.name);
 
-        const li = document.createElement('li');
-        li.appendChild(img);
-        li.appendChild(text);
-        li.addEventListener('click', () => {
+        button.appendChild(img);
+        button.appendChild(text);
+        button.addEventListener('click', () => {
             loadProject(projectID);
         })
+
+        const li = document.createElement('li');
+        li.appendChild(button);
 
         return li;
     }

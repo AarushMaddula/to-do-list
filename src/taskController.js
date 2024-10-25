@@ -1,3 +1,5 @@
+import { isThisISOWeek, isToday } from "date-fns"; 
+
 const taskController = (function() {
     const taskList = [];
 
@@ -15,13 +17,29 @@ const taskController = (function() {
     }
 
     const getTasksByProject = function(projectID) {   
-        const tasks = [];
+        const tasks = taskList.filter((task) => task.getProjectID() === projectID)
 
-        taskList.forEach((task) => {
-            if (task.projectID === projectID) tasks.push(task);
+        return sortTaskList(tasks);
+    }
+
+    const getTodayTasks = function() {
+        const tasks = taskList.filter(task => {
+            return isToday(task.getDate());
         })
 
         return sortTaskList(tasks);
+    }
+
+    const getWeekTasks = function() {
+        const tasks = taskList.filter(task => {
+            return isThisISOWeek(task.getDate());
+        })
+
+        return sortTaskList(tasks);
+    }
+
+    const getAllTasks = function() {
+        return sortTaskList(taskList);
     }
 
     const sortTaskList = function(list) {
@@ -92,8 +110,23 @@ const taskController = (function() {
     }
 
     const getTaskPosition = function(projectID, taskID) {
-        const tasks = getTasksByProject(projectID);
-
+        let tasks;
+        
+        switch (projectID) {
+            case -1: 
+                tasks = getTodayTasks();
+                break;
+            case -2:
+                tasks = getWeekTasks();
+                break;
+            case -3:
+                tasks = getAllTasks();
+                break;
+            default:
+                tasks = getTasksByProject(projectID);
+                break;
+        }
+    
         let index = 0;
 
         tasks.forEach((task, i) => {
@@ -103,7 +136,16 @@ const taskController = (function() {
         return index + 1;
     }
 
-    return {addTask, getTaskByID, getTasksByProject, deleteTask, getTaskPosition};
+    return {
+        addTask, 
+        getTaskByID, 
+        getTasksByProject, 
+        getTodayTasks, 
+        getWeekTasks, 
+        getAllTasks, 
+        deleteTask, 
+        getTaskPosition
+    };
 }) ()
 
 export default taskController;

@@ -3,6 +3,8 @@ let currentTaskID = 0;
 function createTask(projectID, taskName, description, date, priority) {
     const id = currentTaskID++;
 
+    date = date.replace(/-/g, "/");
+
     let checked = false;
     let checkedTime = "none";
 
@@ -41,7 +43,7 @@ function createTask(projectID, taskName, description, date, priority) {
     }
 
     const setDate = function (input) {
-        date = input;
+        date = input.replace(/-/g, "/");
     }
 
     const getDate = function () {
@@ -56,7 +58,15 @@ function createTask(projectID, taskName, description, date, priority) {
         return priority;
     }
 
-    return { id, projectID, getTaskName, setTaskName, getDescription, setDescription, getDate, setDate, getPriority, setPriority, isChecked, getCheckedTime, toggleCheckbox }
+    const setProjectID = function (input) {
+        projectID = input;
+    }
+
+    const getProjectID = function () {
+        return projectID;
+    }
+
+    return { id, getProjectID, setProjectID, getTaskName, setTaskName, getDescription, setDescription, getDate, setDate, getPriority, setPriority, isChecked, getCheckedTime, toggleCheckbox }
 }
 
 export default createTask;

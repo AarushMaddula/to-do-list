@@ -17,9 +17,9 @@
         </div>
         <nav>
             <ul class="default-projects">
-                <li><img src="view-day.svg" alt="icon">Today</li>
-                <li><img src="view-week.svg" alt="icon">Week</li>
-                <li><img src="calendar-blank.svg" alt="icon">All Time</li>
+                <li><button><img src="view-day.svg" alt="icon">Today</button></li>
+                <li><button><img src="view-week.svg" alt="icon">Week</button></li>
+                <li><button><img src="calendar-blank.svg" alt="icon">All Tasks</button></li>
             </ul>
 
             <div class="project-header">
@@ -57,24 +57,30 @@
                 <h2></h2>
                 <ul>
                     <li>
-                        <label for="task">Task</label>
+                        <label for="task">Task<sup>*</sup></label>
                         <input type="text" id="task" name="task" required>
                     </li>
                     <li>
-                        <label for="description">Description</label>
+                        <label for="description">Description<sup>*</sup></label>
                         <textarea type="text" id="description" name="description" required></textarea>
                     </li>
                     <li>
-                        <label for="date">Date</label>
+                        <label for="date">Date<sup>*</sup></label>
                         <input type="date" id="date" name="date" required>
                     </li>
 
                     <li>
-                        <label for="priority">Priority</label>
+                        <label for="priority">Priority<sup>*</sup></label>
                         <select id="priority" name="priority" required>
                             <option value="low">Low</option>
                             <option value="medium">Medium</option>
                             <option value="high">High</option>
+                        </select>
+                    </li>
+
+                    <li>
+                        <label for="project">Project<sup>*</sup></label>
+                        <select id="project" name="project" required>
                         </select>
                     </li>
                 </ul>
@@ -91,7 +97,7 @@
                 <h2></h2>
                 <ul>
                     <li>
-                        <label for="name">Project Name</label>
+                        <label for="name">Project Name<sup>*</sup></label>
                         <input type="text" id="name" name="name" required>
                     </li>
                 </ul>

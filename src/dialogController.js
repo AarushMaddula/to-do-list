@@ -32,19 +32,44 @@ const dialogController = (function () {
 
         const newCancel = cancelButton.cloneNode(true);
         cancelButton.parentNode.replaceChild(newCancel, cancelButton);
-
+        
         return {newSubmit, newCancel}
     }
 
+    function populateProjectInputDialog() {
+        const projectInput = document.querySelector('#project');
+        const projects = projectController.getProjects();
+
+        const displayedProjectID = DOMController.getDisplayedProjectID(); 
+
+        projectInput.innerHTML = "";
+
+        projects.forEach(project => {
+            const option = document.createElement('option');
+            option.value = project.name;
+            option.textContent = project.name;
+            option.setAttribute('data-projectid', project.id)
+
+            if (project.id === displayedProjectID) {
+                option.setAttribute('selected', true);
+            }
+
+            projectInput.appendChild(option);
+        });
+    }
+    
     function addTaskDialogSubmit(e) {
         e.preventDefault();
 
         const task = document.querySelector('#task-dialog input[type="text"]').value;
         const description = document.querySelector('#task-dialog textarea').value;
         const date = document.querySelector('#task-dialog input[type="date"]').value;
-        const priority = document.querySelector('#task-dialog select').value;
+        const priority = document.querySelector('#priority').value;
 
-        const newTask = createTask(DOMController.getDisplayedProjectID(), task, description, date, priority);
+        const optionElement = document.querySelector('#project');
+        const projectID = +optionElement.options[optionElement.selectedIndex].dataset.projectid;
+
+        const newTask = createTask(projectID, task, description, date, priority);
         taskController.addTask(newTask);
         DOMController.addTaskElement(newTask.id);
 
@@ -56,6 +81,8 @@ const dialogController = (function () {
         taskDialogHeader.textContent = "Create Task";
 
         taskDialogSubmitButton.textContent = "Add";
+
+        populateProjectInputDialog();
         
         let buttons = resetDialogButtons(taskDialogSubmitButton, taskDialogCancelButton);
         
@@ -75,16 +102,20 @@ const dialogController = (function () {
         
         const taskName = document.querySelector('#task-dialog input[type="text"]').value;
         const description = document.querySelector('#task-dialog textarea').value;
-        const date = document.querySelector('#task-dialog input[type="date"]').value;
+        const date = document.querySelector('#task-dialog input[type="date"]').value.replace(/-/g, "/");
         const priority = document.querySelector('#task-dialog select').value;
+
+        const optionElement = document.querySelector('#project');
+        const projectID = +optionElement.options[optionElement.selectedIndex].dataset.projectid;
 
         task.setTaskName(taskName);
         task.setDescription(description);
         task.setDate(date);
         task.setPriority(priority);
+        task.setProjectID(projectID);
 
-        DOMController.updateTaskPosition(taskID);
         DOMController.updateTaskInfo(taskID);
+        DOMController.updateTaskPosition(taskID);
 
         taskDialogForm.reset();
         taskDialog.close();
@@ -96,6 +127,8 @@ const dialogController = (function () {
         taskDialogHeader.textContent = "Edit Task";
         taskDialogSubmitButton.textContent = "Save";
 
+        populateProjectInputDialog();
+
         const taskName = document.querySelector('#task-dialog input[type="text"]');
         taskName.value = task.getTaskName();
 
@@ -103,10 +136,13 @@ const dialogController = (function () {
         description.value = task.getDescription();
 
         const date = document.querySelector('#task-dialog input[type="date"]');
-        date.value = task.getDate();
+        date.value = task.getDate().replace(/\//g, "-");;
 
-        const priority = document.querySelector('#task-dialog select');
+        const priority = document.querySelector('#priority');
         priority.value = task.getPriority();
+
+        const projectID = document.querySelector('#project');
+        projectID.value = projectController.getProjectByID(task.getProjectID()).name;
 
         const buttons = resetDialogButtons(taskDialogSubmitButton, taskDialogCancelButton);
         
@@ -148,7 +184,11 @@ const dialogController = (function () {
         projectDialog.showModal();
     }
 
-    return { initAddProjectDialog, initAddTaskDialog, initEditTaskDialog };
+    return { 
+        initAddProjectDialog, 
+        initAddTaskDialog, 
+        initEditTaskDialog 
+    };
 })();
 
 export default dialogController;
