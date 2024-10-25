@@ -27,35 +27,32 @@ const DOMController = (function () {
     
     let displayedProjectID;
 
-    addTaskButton.addEventListener('click', dialogController.initAddTaskDialog);
-    addProjectButton.addEventListener('click', dialogController.initAddProjectDialog);
-
-    dayProject.addEventListener('click', () => {
-        pageHeader.textContent = "Today Tasks";
+    const loadDayProject = function() {
+        pageHeader.textContent = "Today's Tasks";
 
         displayedProjectID = -1;
 
         const tasks = taskController.getTodayTasks();
         loadTasks(tasks);
-    })
-
-    weekProject.addEventListener('click', () => {
+    }
+    
+    const loadWeekProject = function() {
         pageHeader.textContent = "Week Tasks";
 
         displayedProjectID = -2;
 
         const tasks = taskController.getWeekTasks();
         loadTasks(tasks);
-    })
+    }
 
-    allTasksProject.addEventListener('click', () => {
+    const loadAllTasksProject = function() {
         pageHeader.textContent = "All Tasks";
 
         displayedProjectID = -3;
 
         const tasks = taskController.getAllTasks();
         loadTasks(tasks);
-    })
+    }
 
     const getDisplayedProjectID = function () {
         return displayedProjectID;
@@ -206,10 +203,10 @@ const DOMController = (function () {
     }
 
     const addTaskElement = function (taskID) {
+        if (taskController.getTaskByID(taskID).getProjectID() !== displayedProjectID && displayedProjectID >= 0) return;
+
         const newTaskElement = DOMController.createTaskElement(taskID);
         const position = taskController.getTaskPosition(displayedProjectID, taskID);
-
-        if (taskController.getTaskByID(taskID).getProjectID() !== displayedProjectID) return;
 
         if (position === 1) {
             listTableBody.insertBefore(newTaskElement, listTableBody.children[0]);
@@ -269,7 +266,20 @@ const DOMController = (function () {
         }
     }
 
-    return { 
+    addTaskButton.addEventListener('click', dialogController.initAddTaskDialog);
+    addProjectButton.addEventListener('click', dialogController.initAddProjectDialog);
+
+    dayProject.addEventListener('click', loadDayProject);
+    weekProject.addEventListener('click', loadWeekProject);
+    allTasksProject.addEventListener('click', loadAllTasksProject);
+
+    loadProjectContainer(projectController.getProjects());
+    loadDayProject();
+
+    return {
+            loadDayProject, 
+            loadWeekProject,
+            loadAllTasksProject, 
             getDisplayedProjectID,
             loadTasks, 
             createTaskElement, 

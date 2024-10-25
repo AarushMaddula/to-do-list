@@ -1,6 +1,7 @@
 import { isThisISOWeek, isToday } from "date-fns"; 
 
 const taskController = (function() {
+
     const taskList = [];
 
     const addTask = function(taskObj) {

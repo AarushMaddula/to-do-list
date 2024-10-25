@@ -77,9 +77,9 @@ header {
 
     border-radius: 10px;
 
-    box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
 
-    background-color: #D9D9D9;
+    backdrop-filter: blur(8px);
 }
 
 .header-brand {
@@ -186,10 +186,9 @@ header > nav > ul:last-of-type {
     border: none;
     border-radius: 10px;
 
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
 
-    backdrop-filter: blur(3px);
-
+    backdrop-filter: blur(8px);
 }
 
 h1 {

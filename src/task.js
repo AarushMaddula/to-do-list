@@ -1,3 +1,5 @@
+import localStorageController from "./localStorageController.js";
+
 let currentTaskID = 0;
 
 function createTask(projectID, taskName, description, date, priority) {

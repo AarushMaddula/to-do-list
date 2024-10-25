@@ -1,5 +1,6 @@
 
 const projectController = (function() {
+
     const projectList = [];
 
     const addProject = function(projectObj) {

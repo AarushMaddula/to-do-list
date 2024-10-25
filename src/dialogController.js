@@ -1,3 +1,4 @@
+import localStorageController from "./localStorageController";
 import DOMController from "./DOMController";
 import taskController from "./taskController";
 import projectController from "./projectController";
@@ -61,6 +62,11 @@ const dialogController = (function () {
     function addTaskDialogSubmit(e) {
         e.preventDefault();
 
+        if (!taskDialogForm.checkValidity()) {
+            taskDialogForm.reportValidity();
+            return;
+        }
+
         const task = document.querySelector('#task-dialog input[type="text"]').value;
         const description = document.querySelector('#task-dialog textarea').value;
         const date = document.querySelector('#task-dialog input[type="date"]').value;
@@ -72,6 +78,8 @@ const dialogController = (function () {
         const newTask = createTask(projectID, task, description, date, priority);
         taskController.addTask(newTask);
         DOMController.addTaskElement(newTask.id);
+
+        localStorageController.storeTaskList();
 
         taskDialogForm.reset();
         taskDialog.close();
@@ -98,6 +106,11 @@ const dialogController = (function () {
     function editTaskDialogSubmit(taskID, e) {
         e.preventDefault();
         
+        if (!taskDialogForm.checkValidity()) {
+            taskDialogForm.reportValidity();
+            return;
+        }
+
         const task = taskController.getTaskByID(taskID);
         
         const taskName = document.querySelector('#task-dialog input[type="text"]').value;
@@ -116,6 +129,8 @@ const dialogController = (function () {
 
         DOMController.updateTaskInfo(taskID);
         DOMController.updateTaskPosition(taskID);
+
+        localStorageController.storeTaskList();
 
         taskDialogForm.reset();
         taskDialog.close();
@@ -158,11 +173,18 @@ const dialogController = (function () {
     function addProjectDialogSubmit(e) {
         e.preventDefault();
 
+        if (!projectDialogForm.checkValidity()) {
+            projectDialogForm.reportValidity();
+            return;
+        }
+
         const name = document.querySelector('#project-dialog input[type="text"]').value;
 
         const newProject = createProject(name);
         projectController.addProject(newProject);
         DOMController.addProjectElement(newProject.id);
+
+        localStorageController.storeProjectList();
 
         projectDialogForm.reset();
         projectDialog.close();
