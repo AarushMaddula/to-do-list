@@ -67,15 +67,15 @@ const dialogController = (function () {
             return;
         }
 
-        const task = document.querySelector('#task-dialog input[type="text"]').value;
-        const description = document.querySelector('#task-dialog textarea').value;
-        const date = document.querySelector('#task-dialog input[type="date"]').value;
+        const taskName = document.querySelector('#taskName').value;
+        const description = document.querySelector('#description').value;
+        const date = document.querySelector('#date').value.replace(/-/g, "/");
         const priority = document.querySelector('#priority').value;
 
         const optionElement = document.querySelector('#project');
         const projectID = +optionElement.options[optionElement.selectedIndex].dataset.projectid;
 
-        const newTask = createTask(projectID, task, description, date, priority);
+        const newTask = createTask(projectID, taskName, description, date, priority);
         taskController.addTask(newTask);
         DOMController.addTaskElement(newTask.id);
 
@@ -113,10 +113,10 @@ const dialogController = (function () {
 
         const task = taskController.getTaskByID(taskID);
         
-        const taskName = document.querySelector('#task-dialog input[type="text"]').value;
-        const description = document.querySelector('#task-dialog textarea').value;
-        const date = document.querySelector('#task-dialog input[type="date"]').value.replace(/-/g, "/");
-        const priority = document.querySelector('#task-dialog select').value;
+        const taskName = document.querySelector('#taskName').value;
+        const description = document.querySelector('#description').value;
+        const date = document.querySelector('#date').value.replace(/-/g, "/");
+        const priority = document.querySelector('#priority').value;
 
         const optionElement = document.querySelector('#project');
         const projectID = +optionElement.options[optionElement.selectedIndex].dataset.projectid;
@@ -144,13 +144,13 @@ const dialogController = (function () {
 
         populateProjectInputDialog();
 
-        const taskName = document.querySelector('#task-dialog input[type="text"]');
+        const taskName = document.querySelector('#taskName');
         taskName.value = task.getTaskName();
 
-        const description = document.querySelector('#task-dialog textarea');
+        const description = document.querySelector('#description');
         description.value = task.getDescription();
 
-        const date = document.querySelector('#task-dialog input[type="date"]');
+        const date = document.querySelector('#date');
         date.value = task.getDate().replace(/\//g, "-");;
 
         const priority = document.querySelector('#priority');
@@ -178,7 +178,7 @@ const dialogController = (function () {
             return;
         }
 
-        const name = document.querySelector('#project-dialog input[type="text"]').value;
+        const name = document.querySelector('#name').value;
 
         const newProject = createProject(name);
         projectController.addProject(newProject);
