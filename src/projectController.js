@@ -1,3 +1,4 @@
+import taskController from "./taskController";
 
 const projectController = (function() {
 
@@ -39,7 +40,29 @@ const projectController = (function() {
         return index + 1;
     }
 
-    return {addProject, getProjectByID, getProjects, sortProjectList, getProjectPosition}
+    const deleteProject = function(projectID) {
+        const tasks = taskController.getTasksByProject(projectID);
+
+        tasks.forEach(task => {
+            taskController.deleteTask(task.id);
+        })
+
+        projectList.forEach((project, i) => {
+            if (project.id === projectID) {
+                projectList.splice(i, 1);
+                return;
+            }
+        });
+    }
+
+    return {
+        addProject, 
+        getProjectByID, 
+        getProjects, 
+        sortProjectList, 
+        getProjectPosition, 
+        deleteProject
+    }
 }) (); 
 
 export default projectController;

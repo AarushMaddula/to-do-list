@@ -10,6 +10,7 @@ import projectController from "./projectController";
 import dialogController from "./dialogController";
 
 import { format, isSameISOWeek, isToday } from "date-fns"; 
+import localStorageController from "./localStorageController";
 
 const DOMController = (function () {
 
@@ -157,6 +158,7 @@ const DOMController = (function () {
         deleteButton.addEventListener('click', e => {
             taskController.deleteTask(+task.id);
             deleteTaskElement(+task.id);
+            localStorageController.storeTaskList();
         })
 
         const deleteImage = document.createElement('img');
@@ -233,6 +235,14 @@ const DOMController = (function () {
         })
     }
 
+    const deleteProjectElement = function (projectID) {
+        const element = document.querySelector(`.project-container > li[data-projectid="${projectID}"]`);
+        projectContainer.removeChild(element);
+        localStorageController.storeProjectList();
+        localStorageController.storeTaskList();
+        loadDayProject();
+    }
+
     const createProjectElement = function (projectID) {
         const project = projectController.getProjectByID(projectID);
 
@@ -249,8 +259,23 @@ const DOMController = (function () {
             loadProject(projectID);
         })
 
+        const deleteButton = document.createElement('button');
+        deleteButton.addEventListener('click', e => {
+            projectController.deleteProject(+projectID);
+            deleteProjectElement(+projectID);
+        })
+
+        const deleteImage = document.createElement('img');
+        deleteImage.src = trashcan;
+        deleteImage.alt = "delete";
+
+        deleteButton.appendChild(deleteImage);
+
         const li = document.createElement('li');
+        li.setAttribute('data-projectid', projectID);
         li.appendChild(button);
+        li.appendChild(deleteButton);
+
 
         return li;
     }
@@ -290,7 +315,8 @@ const DOMController = (function () {
             createProjectElement, 
             loadProjectContainer, 
             loadProject,
-            addProjectElement
+            addProjectElement,
+            deleteProjectElement
         }
 })()
 
